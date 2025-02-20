@@ -31,7 +31,7 @@ jobs:
             node-version: '18'
 
       - name: Install dependencies (API)
-        run: docker exec api sh -c "cd /app && npm install"
+        run: docker exec api sh -c "npm install"
 
       - name: Install dependencies (Front)
         run: docker exec front sh -c "cd /app && npm install"
