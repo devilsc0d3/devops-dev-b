@@ -20,6 +20,9 @@ FROM nginx:alpine
 # Copier les fichiers build dans le dossier de Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
+
+# ↓ par defaut, nginx écoute sur le port 80 ↓
+
 # Exposer le port 80
 EXPOSE 80
 

@@ -1,0 +1,55 @@
+name: Demo Workflows
+
+on:
+  push:
+    branches:
+      - next
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      api:
+        image: node:18-slim
+        options: --name api --network bridge
+        ports:
+          - 3000:3000
+      front:
+        image: node:lts-alpine
+        options: --name front --network bridge
+        ports:
+          - 8080:80
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+            node-version: '18'
+
+      - name: Install dependencies (API)
+        run: docker exec api sh -c "cd /app && npm install"
+
+      - name: Install dependencies (Front)
+        run: docker exec front sh -c "cd /app && npm install"
+
+      - name: Wait for API to be ready
+        run: |
+          for i in {1..30}; do
+            if curl -s http://localhost:3000/health; then
+              echo "API is up!"
+              exit 0
+            fi
+            echo "Waiting for API..."
+            sleep 2
+          done
+          echo "API did not start in time" && exit 1
+
+      - name: Run tests
+        run: docker exec api sh -c "cd /app && npm test"
+
+      - name: Build Frontend
+        run: docker exec front sh -c "cd /app && npm run build"
