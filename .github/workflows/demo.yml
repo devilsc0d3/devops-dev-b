@@ -12,12 +12,12 @@ jobs:
     services:
       api:
         image: node:18-slim
-        options: --name api --network bridge
+        options: --name api
         ports:
           - 3000:3000
       front:
         image: node:lts-alpine
-        options: --name front --network bridge
+        options: --name front
         ports:
           - 8080:80
 
