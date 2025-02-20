@@ -38,17 +38,9 @@ jobs:
         working-directory: ./front
         run: npm i
 
-      - name: Wait for API to be ready
-        run: |
-          for i in {1..30}; do
-            if curl -s http://localhost:3000/health; then
-              echo "API is up!"
-              exit 0
-            fi
-            echo "Waiting for API..."
-            sleep 2
-          done
-          echo "API did not start in time" && exit 1
+
+      - name: Run API
+        run: npm start
 
       - name: Run tests
         run: npm test
