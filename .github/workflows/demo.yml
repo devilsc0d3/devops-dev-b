@@ -42,6 +42,10 @@ jobs:
         working-directory: ./back
         run: npm test
 
-      - name: Build Frontend
+      - name: Build back docker
+        working-directory: ./back
+        run: docker build -t back .
+
+      - name: Build front docker
         working-directory: ./front
-        run: npm run build
+        run: docker build -t front .
