@@ -31,10 +31,12 @@ jobs:
             node-version: '18'
 
       - name: Install dependencies (API)
-        run: docker exec api sh -c "npm install"
+        working-directory: ./back
+        run: npm i
 
       - name: Install dependencies (Front)
-        run: docker exec front sh -c "cd /app && npm install"
+        working-directory: ./front
+        run: npm i
 
       - name: Wait for API to be ready
         run: |
@@ -49,7 +51,8 @@ jobs:
           echo "API did not start in time" && exit 1
 
       - name: Run tests
-        run: docker exec api sh -c "cd /app && npm test"
+        run: npm test
 
       - name: Build Frontend
-        run: docker exec front sh -c "cd /app && npm run build"
+        working-directory: ./front
+        run: npm run build
