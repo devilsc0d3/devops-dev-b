@@ -63,15 +63,16 @@ jobs:
         working-directory: ./front
         run: docker build -t front .
 
-#      - name: Login to Scaleway
-#        run: echo ${{ secrets.SCW_SECRET_KEY }} | docker login rg.fr-par.scw.cloud -u ${{ secrets.SCW_ACCESS_KEY }} --password-stdin
-#
-#      - name: Tag and push back image
-#        run: |
-#          docker tag back:latest rg.fr-par.scw.cloud/namespace-faure-leo/back:latest
-#          docker push rg.fr-par.scw.cloud/namespace-faure-leo/back:latest
-#
-#      - name: Tag and push front image
-#        run: |
-#          docker tag front:latest rg.fr-par.scw.cloud/namespace-faure-leo/front:latest
-#          docker push rg.fr-par.scw.cloud/namespace-faure-leo/front:latest
+      - name: Login to Scaleway
+        run: echo "${{ secrets.SCW_SECRET_KEY }}" | docker login rg.fr-par.scw.cloud/namespace-faure-leo -u nologin --password-stdin
+
+
+      - name: Tag and push back image
+        run: |
+          docker tag back:latest rg.fr-par.scw.cloud/namespace-faure-leo/back:latest
+          docker push rg.fr-par.scw.cloud/namespace-faure-leo/back:latest
+
+      - name: Tag and push front image
+        run: |
+          docker tag front:latest rg.fr-par.scw.cloud/namespace-faure-leo/front:latest
+          docker push rg.fr-par.scw.cloud/namespace-faure-leo/front:latest
