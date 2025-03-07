@@ -4,15 +4,26 @@ services:
   api:
     build: ./back
     container_name: api
+    restart: always
     ports:
       - "3000:3000"
-    volumes:
-        - ./back:/app
+    networks:
+      - "app_network"
+    env_file:
+      - ./back/.env
 
   front:
-    build: ./front
+    build:
+      context: ./front
+      args:
+        - VITE_API_URL=http://localhost:3000
     container_name: front
+    restart: always
     ports:
-      - "5173:5173"
-    volumes:
-        - ./front:/app
+      - "8080:80"
+    networks:
+     - "app_network"
+
+networks:
+  app_network:
+    driver: bridge

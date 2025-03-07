@@ -10,8 +10,10 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+RUN npm rebuild bcrypt
 
 RUN npx prisma generate
+
+EXPOSE 3000
 
 CMD ["npm", "start"]

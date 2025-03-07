@@ -1,0 +1,78 @@
+name: Demo Workflows
+
+on:
+  push:
+    branches:
+      - next
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies (API)
+        working-directory: ./back
+        run: npm i
+
+      - name: Install dependencies (Front)
+        working-directory: ./front
+        run: npm i
+
+      - name: Run tests
+        working-directory: ./back
+        run: npm test
+
+
+  build-and-push:
+    runs-on: ubuntu-latest
+    needs: test
+
+    services:
+      api:
+        image: node:18-slim
+        options: --name api
+        ports:
+          - 3000:3000
+      front:
+        image: node:lts-alpine
+        options: --name front
+        ports:
+          - 8080:80
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Build back docker
+        working-directory: ./back
+        run: docker build -t back .
+
+      - name: Build front docker
+        working-directory: ./front
+        run: docker build -t front .
+
+      - name: Login to Scaleway
+        run: echo "${{ secrets.SCW_SECRET_KEY }}" | docker login rg.fr-par.scw.cloud/namespace-faure-leo -u nologin --password-stdin
+
+
+      - name: Tag and push back image
+        run: |
+          docker tag back:latest rg.fr-par.scw.cloud/namespace-faure-leo/back:latest
+          docker push rg.fr-par.scw.cloud/namespace-faure-leo/back:latest
+
+      - name: Tag and push front image
+        run: |
+          docker tag front:latest rg.fr-par.scw.cloud/namespace-faure-leo/front:latest
+          docker push rg.fr-par.scw.cloud/namespace-faure-leo/front:latest

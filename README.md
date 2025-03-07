@@ -1,3 +1,13 @@
+<pre style="background-color: transparent">
+ ______  ____       __     
+/\__  _\/\  _`\   /'__`\   
+\/_/\ \/\ \ \L\ \/\_\L\ \  
+   \ \ \ \ \ ,__/\/_/_\_<_ 
+    \ \ \ \ \ \/   /\ \L\ \
+     \ \_\ \ \_\   \ \____/
+      \/_/  \/_/    \/___/
+</pre>
+
 # Store application
 
 ## Project Overview
